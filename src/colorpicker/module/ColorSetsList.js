@@ -28,7 +28,7 @@ export default class ColorSetsList extends BaseModule {
 
         if (globalPalettes) {
             this.$store.dispatch('/setUserPalette', globalPalettes);
-            this.$store.colorSetsList = globalPalletes;
+            this.$store.colorSetsList = globalPalettes;
         } else {
             this.$store.colorSetsList = [];
             this.$store.currentColorSets = {};
