@@ -5,21 +5,21 @@ export default class ColorSetsList extends BaseModule {
     initialize () {
         super.initialize();
 
-        // // set property
-        // this.$store.colorSetsList = [
-        //     {   name : "Material", 
-        //         colors: [ 
-        //             '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
-        //             '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50', 
-        //             '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', 
-        //             '#FF5722',  '#795548', '#9E9E9E', '#607D8B' 
-        //         ],
-        //         edit: true
-        //     },
-        //     { name : "Custom", "edit" : true, "colors" : [] },
-        //     { name: "Color Scale", "scale" : ['red', 'yellow', 'black' ], count : 5 }
-        // ]
-        // this.$store.currentColorSets = {}      
+        // set property
+        this.$store.colorSetsList = [
+            {   name : "Material", 
+                colors: [ 
+                    '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
+                    '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50', 
+                    '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', 
+                    '#FF5722',  '#795548', '#9E9E9E', '#607D8B' 
+                ],
+                edit: true
+            },
+            { name : "Custom", "edit" : true, "colors" : [] },
+            { name: "Color Scale", "scale" : ['red', 'yellow', 'black' ], count : 5 }
+        ]
+        this.$store.currentColorSets = {}      
         
         const globalPalettes =
             (typeof globalThis !== 'undefined' && Array.isArray(globalThis.PALETTES) && globalThis.PALETTES.length ? globalThis.PALETTES : null)
@@ -27,9 +27,8 @@ export default class ColorSetsList extends BaseModule {
             || (typeof global !== 'undefined' && Array.isArray(global.PALETTES) && global.PALETTES.length ? global.PALETTES : null);
 
         if (globalPalettes) {
-            // registrar como paletas de usuario para que /list las priorice
             this.$store.dispatch('/setUserPalette', globalPalettes);
-            this.$store.colorSetsList = [];
+            this.$store.colorSetsList = globalPalletes;
         } else {
             this.$store.colorSetsList = [];
             this.$store.currentColorSets = {};
