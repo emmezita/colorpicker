@@ -4737,12 +4737,36 @@ var ColorSetsList = function (_BaseModule) {
         value: function initialize() {
             get(ColorSetsList.prototype.__proto__ || Object.getPrototypeOf(ColorSetsList.prototype), 'initialize', this).call(this);
 
-            // set property
-            this.$store.colorSetsList = [{ name: "Material",
-                colors: ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E', '#607D8B'],
-                edit: true
-            }, { name: "Custom", "edit": true, "colors": [] }, { name: "Color Scale", "scale": ['red', 'yellow', 'black'], count: 5 }];
+            // // set property
+            var defaultPalettes = [
+                {   name : "Material", 
+                    colors: [ 
+                        '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
+                        '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50', 
+                        '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', 
+                        '#FF5722',  '#795548', '#9E9E9E', '#607D8B' 
+                    ],
+                    edit: true
+                },
+                { name : "Chatbot", "edit" : true, "colors" : [] },
+                { name: "Color Scale", "scale" : ['red', 'yellow', 'black' ], count : 5 }
+            ]
             this.$store.currentColorSets = {};
+
+            const globalPalettes =
+                (typeof globalThis !== 'undefined' && Array.isArray(globalThis.PALETTES) && globalThis.PALETTES.length ? globalThis.PALETTES : null)
+                || (typeof window !== 'undefined' && Array.isArray(window.PALETTES) && window.PALETTES.length ? window.PALETTES : null)
+                || (typeof global !== 'undefined' && Array.isArray(global.PALETTES) && global.PALETTES.length ? global.PALETTES : null);
+
+            if (globalPalettes) {
+                // registrar como paletas de usuario para que /list las priorice
+                this.$store.dispatch('/setUserPalette', globalPalettes);
+                this.$store.colorSetsList = globalPalettes;
+            } else {
+                this.$store.colorSetsList = defaultPalettes;
+                this.$store.currentColorSets = {};
+            }
+
         }
     }, {
         key: '/list',
@@ -4851,6 +4875,8 @@ var ColorSetsList = function (_BaseModule) {
     }, {
         key: '/getColors',
         value: function getColors($store, element) {
+            console.log("getColors called with element:", element);
+
             if (element.scale) {
                 return Color$1.scale(element.scale, element.count);
             }
